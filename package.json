@@ -1,34 +1,26 @@
 {
-  "name": "cordova-plugin-camera",
+  "name": "cordova-plugin-android-photo",
   "version": "4.1.0-dev",
   "description": "Cordova Camera Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
-    "id": "cordova-plugin-camera",
+    "id": "cordova-plugin-android-photo",
     "platforms": [
-      "android",
-      "ios",
-      "browser",
-      "windows",
-      "osx"
+      "android"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-camera"
+    "url": "https://github.com/shaunjohansen/cordova-plugin-android-photo"
   },
   "bugs": {
-    "url": "https://issues.apache.org/jira/browse/CB"
+    "url": "https://github.com/shaunjohansen/cordova-plugin-android-photo/issues"
   },
   "keywords": [
     "cordova",
     "camera",
     "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios",
-    "cordova-browser",
-    "cordova-windows",
-    "cordova-osx"
+    "cordova-android"
   ],
   "scripts": {
     "test": "npm run eslint",

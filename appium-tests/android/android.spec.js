@@ -23,7 +23,7 @@
 // you can find it here: https://github.com/apache/cordova-paramedic/
 // it is not necessary to do a full CI setup to run these tests
 // Run:
-//      node cordova-paramedic/main.js --platform android --plugin cordova-plugin-camera --skipMainTests --target <emulator name>
+//      node cordova-paramedic/main.js --platform android --plugin cordova-plugin-android-photo --skipMainTests --target <emulator name>
 // Please note only Android 5.1 and 4.4 are supported at this point.
 
 'use strict';
@@ -292,7 +292,7 @@ describe('Camera tests Android.', function () {
                         });
             })
             .then(function () {
-                // doing it inside a function because otherwise 
+                // doing it inside a function because otherwise
                 // it would not hook up to the webviewContext var change
                 // in the first methods of this chain
                 return driver.context(webviewContext);
