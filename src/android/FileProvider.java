@@ -16,6 +16,6 @@
        specific language governing permissions and limitations
        under the License.
 */
-package org.apache.cordova.camera;
+package org.apache.cordova.photo;
 
 public class FileProvider extends android.support.v4.content.FileProvider {}

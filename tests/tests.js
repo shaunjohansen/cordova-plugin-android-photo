@@ -23,18 +23,18 @@
 /* eslint-env jasmine */
 
 exports.defineAutoTests = function () {
-    describe('Camera (navigator.camera)', function () {
+    describe('Camera (navigator.photo)', function () {
         it('should exist', function () {
-            expect(navigator.camera).toBeDefined();
+            expect(navigator.photo).toBeDefined();
         });
 
         it('should contain a getPicture function', function () {
-            expect(navigator.camera.getPicture).toBeDefined();
-            expect(typeof navigator.camera.getPicture === 'function').toBe(true);
+            expect(navigator.photo.getPicture).toBeDefined();
+            expect(typeof navigator.photo.getPicture === 'function').toBe(true);
         });
     });
 
-    describe('Camera Constants (window.Camera + navigator.camera)', function () {
+    describe('Camera Constants (window.Camera + navigator.photo)', function () {
         it('camera.spec.1 window.Camera should exist', function () {
             expect(window.Camera).toBeDefined();
         });
@@ -43,34 +43,34 @@ exports.defineAutoTests = function () {
             expect(Camera.DestinationType.DATA_URL).toBe(0);
             expect(Camera.DestinationType.FILE_URI).toBe(1);
             expect(Camera.DestinationType.NATIVE_URI).toBe(2);
-            expect(navigator.camera.DestinationType.DATA_URL).toBe(0);
-            expect(navigator.camera.DestinationType.FILE_URI).toBe(1);
-            expect(navigator.camera.DestinationType.NATIVE_URI).toBe(2);
+            expect(navigator.photo.DestinationType.DATA_URL).toBe(0);
+            expect(navigator.photo.DestinationType.FILE_URI).toBe(1);
+            expect(navigator.photo.DestinationType.NATIVE_URI).toBe(2);
         });
 
         it('camera.spec.3 should contain two EncodingType constants', function () {
             expect(Camera.EncodingType.JPEG).toBe(0);
             expect(Camera.EncodingType.PNG).toBe(1);
-            expect(navigator.camera.EncodingType.JPEG).toBe(0);
-            expect(navigator.camera.EncodingType.PNG).toBe(1);
+            expect(navigator.photo.EncodingType.JPEG).toBe(0);
+            expect(navigator.photo.EncodingType.PNG).toBe(1);
         });
 
         it('camera.spec.4 should contain three MediaType constants', function () {
             expect(Camera.MediaType.PICTURE).toBe(0);
             expect(Camera.MediaType.VIDEO).toBe(1);
             expect(Camera.MediaType.ALLMEDIA).toBe(2);
-            expect(navigator.camera.MediaType.PICTURE).toBe(0);
-            expect(navigator.camera.MediaType.VIDEO).toBe(1);
-            expect(navigator.camera.MediaType.ALLMEDIA).toBe(2);
+            expect(navigator.photo.MediaType.PICTURE).toBe(0);
+            expect(navigator.photo.MediaType.VIDEO).toBe(1);
+            expect(navigator.photo.MediaType.ALLMEDIA).toBe(2);
         });
 
         it('camera.spec.5 should contain three PictureSourceType constants', function () {
             expect(Camera.PictureSourceType.PHOTOLIBRARY).toBe(0);
             expect(Camera.PictureSourceType.CAMERA).toBe(1);
             expect(Camera.PictureSourceType.SAVEDPHOTOALBUM).toBe(2);
-            expect(navigator.camera.PictureSourceType.PHOTOLIBRARY).toBe(0);
-            expect(navigator.camera.PictureSourceType.CAMERA).toBe(1);
-            expect(navigator.camera.PictureSourceType.SAVEDPHOTOALBUM).toBe(2);
+            expect(navigator.photo.PictureSourceType.PHOTOLIBRARY).toBe(0);
+            expect(navigator.photo.PictureSourceType.CAMERA).toBe(1);
+            expect(navigator.photo.PictureSourceType.SAVEDPHOTOALBUM).toBe(2);
         });
     });
 };
@@ -158,7 +158,7 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         clearStatus();
         var options = extractOptions();
         log('Getting picture with options: ' + JSON.stringify(options));
-        var popoverHandle = navigator.camera.getPicture(getPictureWin, onGetPictureError, options);
+        var popoverHandle = navigator.photo.getPicture(getPictureWin, onGetPictureError, options);
 
         // Reposition the popover if the orientation changes.
         window.onorientationchange = function () {

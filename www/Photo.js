@@ -27,19 +27,19 @@ var exec = require('cordova/exec');
  */
 
 /**
- * @exports camera
+ * @exports photo
  */
-var cameraExport = {};
+var photoExport = {};
 
 /**
  * Callback function that provides an error message.
- * @callback module:camera.onError
+ * @callback module:photo.onError
  * @param {string} message - The message is provided by the device's native code.
  */
 
 /**
  * Callback function that provides the image data.
- * @callback module:camera.onSuccess
+ * @callback module:photo.onSuccess
  * @param {string} imageUri - the image file URI.
  * @example
  * // Show image
@@ -54,7 +54,7 @@ var cameraExport = {};
  * @description Takes a photo using the camera.  The image is passed to the success callback as
  * the URI for the image file.
  *
- * The `camera.getPicture` function opens the device's default camera
+ * The `photo.getPicture` function opens the device's default camera
  * application that allows users to snap a photo.
  * Once the user snaps the photo, the camera application closes and the application is restored.
  *
@@ -66,14 +66,14 @@ var cameraExport = {};
  * - Android
  *
  * @example
- * navigator.camera.getPicture(cameraSuccess, cameraError);
+ * navigator.photo.getPicture(cameraSuccess, cameraError);
  * @param {module:camera.onSuccess} successCallback
  * @param {module:camera.onError} errorCallback
  */
-cameraExport.getPicture = function (successCallback, errorCallback) {
+photoExport.getPicture = function (successCallback, errorCallback) {
     argscheck.checkArgs('fF', 'Camera.getPicture', arguments);
 
     exec(successCallback, errorCallback, 'Camera', 'takePicture');
 };
 
-module.exports = cameraExport;
+module.exports = photoExport;

@@ -14,7 +14,7 @@
        specific language governing permissions and limitations
        under the License.
  */
-package org.apache.cordova.camera;
+package org.apache.cordova.photo;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
@@ -236,7 +236,7 @@ public class FileHelper {
         }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
-    
+
     /**
      * Returns the mime type of the data specified by the given URI string.
      *

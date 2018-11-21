@@ -101,7 +101,7 @@ module.exports.getPicture = function (opts, pid) {
         navigator._appiumPromises[pid - 1] = null;
     }
     navigator._appiumPromises[pid] = Q.defer();
-    navigator.camera.getPicture(function (result) {
+    navigator.photo.getPicture(function (result) {
         navigator._appiumPromises[pid].resolve(result);
     }, function (err) {
         navigator._appiumPromises[pid].reject(err);
@@ -117,13 +117,13 @@ module.exports.checkPicture = function (pid, options, skipContentCheck, cb) {
     var isIos = cordova.platformId === "ios";
     var isAndroid = cordova.platformId === "android";
     // skip image type check if it's unmodified on Android:
-    // https://github.com/apache/cordova-plugin-camera/#android-quirks-1
+    // https://github.com/shaunjohansen/cordova-plugin-android-photo/#android-quirks-1
     var skipFileTypeCheckAndroid = isAndroid && options.quality === 100 &&
         !options.targetWidth && !options.targetHeight &&
         !options.correctOrientation;
 
     // Skip image type check if destination is NATIVE_URI and source - device's photoalbum
-    // https://github.com/apache/cordova-plugin-camera/#ios-quirks-1
+    // https://github.com/shaunjohansen/cordova-plugin-android-photo/#ios-quirks-1
     var skipFileTypeCheckiOS = isIos && options.destinationType === Camera.DestinationType.NATIVE_URI &&
         (options.sourceType === Camera.PictureSourceType.PHOTOLIBRARY ||
          options.sourceType === Camera.PictureSourceType.SAVEDPHOTOALBUM);

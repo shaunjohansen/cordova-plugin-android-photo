@@ -34,15 +34,15 @@
         <engine name="cordova-android" version=">=6.3.0" />
     </engines>
 
-    <js-module src="www/Camera.js" name="camera">
-        <clobbers target="navigator.camera" />
+    <js-module src="www/Photo.js" name="photo">
+        <clobbers target="navigator.photo" />
     </js-module>
 
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Camera">
-                <param name="android-package" value="org.apache.cordova.camera.CameraLauncher"/>
+                <param name="android-package" value="org.apache.cordova.photo.CameraLauncher"/>
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
@@ -50,7 +50,7 @@
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
           <provider
-              android:name="org.apache.cordova.camera.FileProvider"
+              android:name="org.apache.cordova.photo.FileProvider"
               android:authorities="${applicationId}.provider"
               android:exported="false"
               android:grantUriPermissions="true" >
@@ -60,10 +60,10 @@
           </provider>
         </config-file>
 
-        <source-file src="src/android/CameraLauncher.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/CordovaUri.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/FileHelper.java" target-dir="src/org/apache/cordova/camera" />
-        <source-file src="src/android/FileProvider.java" target-dir="src/org/apache/cordova/camera" />
+        <source-file src="src/android/CameraLauncher.java" target-dir="src/org/apache/cordova/photo" />
+        <source-file src="src/android/CordovaUri.java" target-dir="src/org/apache/cordova/photo" />
+        <source-file src="src/android/FileHelper.java" target-dir="src/org/apache/cordova/photo" />
+        <source-file src="src/android/FileProvider.java" target-dir="src/org/apache/cordova/photo" />
         <source-file src="src/android/xml/camera_provider_paths.xml" target-dir="res/xml" />
 
         <framework src="com.android.support:support-v4:24.1.1+" />

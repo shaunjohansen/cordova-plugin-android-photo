@@ -17,7 +17,7 @@
        under the License.
 */
 
-package org.apache.cordova.camera;
+package org.apache.cordova.photo;
 
 import android.net.Uri;
 import android.os.Build;
