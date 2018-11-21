@@ -56,7 +56,7 @@
               android:grantUriPermissions="true" >
               <meta-data
                   android:name="android.support.FILE_PROVIDER_PATHS"
-                  android:resource="@xml/camera_provider_paths"/>
+                  android:resource="@xml/photo_provider_paths"/>
           </provider>
         </config-file>
 
@@ -64,7 +64,7 @@
         <source-file src="src/android/CordovaUri.java" target-dir="src/org/apache/cordova/photo" />
         <source-file src="src/android/FileHelper.java" target-dir="src/org/apache/cordova/photo" />
         <source-file src="src/android/FileProvider.java" target-dir="src/org/apache/cordova/photo" />
-        <source-file src="src/android/xml/camera_provider_paths.xml" target-dir="res/xml" />
+        <source-file src="src/android/xml/photo_provider_paths.xml" target-dir="res/xml" />
 
         <framework src="com.android.support:support-v4:24.1.1+" />
 
