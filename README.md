@@ -97,6 +97,19 @@ The image file location is sent to the [`successCallback`](#module_photo.success
 navigator.photo.takePicture(successCallback, errorCallback);
 ```
 
+#### Android Quirks
+
+Android uses intents to launch the camera activity on the device to capture
+images, and on phones with low memory, the Cordova activity may be killed.  In this
+scenario, the result from the plugin call will be delivered via the resume event.
+See [the Android Lifecycle guide][android_lifecycle]
+for more information. The `pendingResult.result` value will contain the value that
+would be passed to the callbacks (either the URI/URL or an error message). Check
+the `pendingResult.pluginStatus` to determine whether or not the call was
+successful.
+
+[android_lifecycle]: http://cordova.apache.org/docs/en/dev/guide/platforms/android/lifecycle.html
+
 <a name="module_photo.errorCallback"></a>
 
 ### camera.errorCallback : <code>function</code>
@@ -131,20 +144,3 @@ function cameraCallback(imageUri) {
    image.src = imageUri;
 }
 ```
-
----
-
-## `photo.takePicture` Errata
-
-### Android Quirks
-
-Android uses intents to launch the camera activity on the device to capture
-images, and on phones with low memory, the Cordova activity may be killed.  In this
-scenario, the result from the plugin call will be delivered via the resume event.
-See [the Android Lifecycle guide][android_lifecycle]
-for more information. The `pendingResult.result` value will contain the value that
-would be passed to the callbacks (either the URI/URL or an error message). Check
-the `pendingResult.pluginStatus` to determine whether or not the call was
-successful.
-
-[android_lifecycle]: http://cordova.apache.org/docs/en/dev/guide/platforms/android/lifecycle.html
