@@ -21,9 +21,9 @@ description: Take photos with the camera on Android.
 #         under the License.
 -->
 
-|AppVeyor|Travis CI|
-|:-:|:-:|
-|[![Build status](https://ci.appveyor.com/api/projects/status/github/shaunjohansen/cordova-plugin-android-photo?branch=master)](https://ci.appveyor.com/project/shaunjohansen/cordova-plugin-android-photo)|[![Build Status](https://travis-ci.org/shaunjohansen/cordova-plugin-android-photo.svg?branch=master)](https://travis-ci.org/shaunjohansen/cordova-plugin-android-photo)|
+|Travis CI|
+|:-:|
+|[![Build Status](https://travis-ci.org/shaunjohansen/cordova-plugin-android-photo.svg?branch=master)](https://travis-ci.org/shaunjohansen/cordova-plugin-android-photo)|
 
 # cordova-plugin-android-photo
 
