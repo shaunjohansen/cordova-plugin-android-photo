@@ -19,7 +19,7 @@
  *
 */
 
-/* globals Camera, resolveLocalFileSystemURL, FileEntry, CameraPopoverOptions, FileTransfer, FileUploadOptions, LocalFileSystem, MSApp */
+/* globals FileEntry, FileTransfer, FileUploadOptions, LocalFileSystem */
 /* eslint-env jasmine */
 
 exports.defineAutoTests = function () {
@@ -33,46 +33,6 @@ exports.defineAutoTests = function () {
             expect(typeof navigator.photo.takePicture === 'function').toBe(true);
         });
     });
-
-    describe('Camera Constants (window.Camera + navigator.photo)', function () {
-        it('camera.spec.1 window.Camera should exist', function () {
-            expect(window.Camera).toBeDefined();
-        });
-
-        it('camera.spec.2 should contain three DestinationType constants', function () {
-            expect(Camera.DestinationType.DATA_URL).toBe(0);
-            expect(Camera.DestinationType.FILE_URI).toBe(1);
-            expect(Camera.DestinationType.NATIVE_URI).toBe(2);
-            expect(navigator.photo.DestinationType.DATA_URL).toBe(0);
-            expect(navigator.photo.DestinationType.FILE_URI).toBe(1);
-            expect(navigator.photo.DestinationType.NATIVE_URI).toBe(2);
-        });
-
-        it('camera.spec.3 should contain two EncodingType constants', function () {
-            expect(Camera.EncodingType.JPEG).toBe(0);
-            expect(Camera.EncodingType.PNG).toBe(1);
-            expect(navigator.photo.EncodingType.JPEG).toBe(0);
-            expect(navigator.photo.EncodingType.PNG).toBe(1);
-        });
-
-        it('camera.spec.4 should contain three MediaType constants', function () {
-            expect(Camera.MediaType.PICTURE).toBe(0);
-            expect(Camera.MediaType.VIDEO).toBe(1);
-            expect(Camera.MediaType.ALLMEDIA).toBe(2);
-            expect(navigator.photo.MediaType.PICTURE).toBe(0);
-            expect(navigator.photo.MediaType.VIDEO).toBe(1);
-            expect(navigator.photo.MediaType.ALLMEDIA).toBe(2);
-        });
-
-        it('camera.spec.5 should contain three PictureSourceType constants', function () {
-            expect(Camera.PictureSourceType.PHOTOLIBRARY).toBe(0);
-            expect(Camera.PictureSourceType.CAMERA).toBe(1);
-            expect(Camera.PictureSourceType.SAVEDPHOTOALBUM).toBe(2);
-            expect(navigator.photo.PictureSourceType.PHOTOLIBRARY).toBe(0);
-            expect(navigator.photo.PictureSourceType.CAMERA).toBe(1);
-            expect(navigator.photo.PictureSourceType.SAVEDPHOTOALBUM).toBe(2);
-        });
-    });
 };
 
 /******************************************************************************/
@@ -84,16 +44,6 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     var fileObj = null;
     var fileEntry = null;
     var pageStartTime = +new Date();
-
-    // default camera options
-    var camQualityDefault = ['50', 50];
-    var camDestinationTypeDefault = ['FILE_URI', 1];
-    var camPictureSourceTypeDefault = ['CAMERA', 1];
-    var camAllowEditDefault = ['allowEdit', false];
-    var camEncodingTypeDefault = ['JPEG', 0];
-    var camMediaTypeDefault = ['mediaType', 0];
-    var camCorrectOrientationDefault = ['correctOrientation', false];
-    var camSaveToPhotoAlbumDefault = ['saveToPhotoAlbum', true];
 
     function log (value) {
         console.log(value);
@@ -111,14 +61,7 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     }
 
     function setPicture (url, callback) {
-        try {
-            window.atob(url);
-            // if we got here it is a base64 string (DATA_URL)
-            url = 'data:image/jpeg;base64,' + url;
-        } catch (e) {
-            // not DATA_URL
-        }
-        log('URL: "' + url.slice(0, 90) + '"');
+        log('image URI: "' + url + '"');
 
         pictureUrl = url;
         var img = document.getElementById('camera_image');
@@ -133,38 +76,20 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         };
     }
 
-    function onGetPictureError (e) {
-        log('Error getting picture: ' + (e.code || e));
+    function onTakePictureError (e) {
+        log('Error getting picture: ' + e && (e.code || e));
     }
 
-    function getPictureWin (data) {
+    function onTakePictureSuccess (data) {
         setPicture(data);
-        // TODO: Fix resolveLocalFileSystemURI to work with native-uri.
-        if (pictureUrl.indexOf('file:') === 0 || pictureUrl.indexOf('content:') === 0 || pictureUrl.indexOf('ms-appdata:') === 0 || pictureUrl.indexOf('assets-library:') === 0) {
-            resolveLocalFileSystemURL(data, function (e) {
-                fileEntry = e;
-                logCallback('resolveLocalFileSystemURL()', true)(e.toURL());
-                readFile();
-            }, logCallback('resolveLocalFileSystemURL()', false));
-        } else if (pictureUrl.indexOf('data:image/jpeg;base64') === 0) {
-            // do nothing
-        } else {
-            var path = pictureUrl.replace(/^file:\/\/(localhost)?/, '').replace(/%20/g, ' ');
-            fileEntry = new FileEntry('image_name.png', path);
-        }
+        var path = pictureUrl.replace(/^file:\/\/(localhost)?/, '').replace(/%20/g, ' ');
+        fileEntry = new FileEntry('image_name.png', path);
     }
 
     function takePicture () {
         clearStatus();
-        var options = extractOptions();
-        log('Getting picture with options: ' + JSON.stringify(options));
-        var popoverHandle = navigator.photo.takePicture(getPictureWin, onGetPictureError, options);
-
-        // Reposition the popover if the orientation changes.
-        window.onorientationchange = function () {
-            var newPopoverOptions = new CameraPopoverOptions(0, 0, 100, 100, 0);
-            popoverHandle.setPosition(newPopoverOptions);
-        };
+        log('Getting picture');
+        navigator.photo.takePicture(onTakePictureSuccess, onTakePictureError);
     }
 
     function uploadImage () {
@@ -243,52 +168,13 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     function copyImage () {
         var onFileSystemReceived = function (fileSystem) {
             var destDirEntry = fileSystem.root;
-            var origName = fileEntry.name;
 
             // Test FileEntry API here.
-            fileEntry.copyTo(destDirEntry, 'copied_file.png', logCallback('FileEntry.copyTo', true), logCallback('FileEntry.copyTo', false));
-            fileEntry.moveTo(destDirEntry, 'moved_file.png', logCallback('FileEntry.moveTo', true), logCallback('FileEntry.moveTo', false));
-
-            // cleanup
-            // rename moved file back to original name so other tests can reference image
-            resolveLocalFileSystemURL(destDirEntry.nativeURL + 'moved_file.png', function (fileEntry) {
-                fileEntry.moveTo(destDirEntry, origName, logCallback('FileEntry.moveTo', true), logCallback('FileEntry.moveTo', false));
-                console.log('Cleanup: successfully renamed file back to original name');
-            }, function () {
-                console.log('Cleanup: failed to rename file back to original name');
-            });
-
-            // remove copied file
-            resolveLocalFileSystemURL(destDirEntry.nativeURL + 'copied_file.png', function (fileEntry) {
-                fileEntry.remove(logCallback('FileEntry.remove', true), logCallback('FileEntry.remove', false));
-                console.log('Cleanup: successfully removed copied file');
-            }, function () {
-                console.log('Cleanup: failed to remove copied file');
-            });
+            fileEntry.copyTo(destDirEntry, 'copied_file.jpg', logCallback('FileEntry.copyTo', true), logCallback('FileEntry.copyTo', false));
+            fileEntry.moveTo(destDirEntry, 'moved_file.jpg', logCallback('FileEntry.moveTo', true), logCallback('FileEntry.moveTo', false));
         };
 
         window.requestFileSystem(LocalFileSystem.TEMPORARY, 0, onFileSystemReceived, null);
-    }
-
-    /**
-     * Write image to library using a NATIVE_URI destination type
-     * This calls FileEntry.createWriter, FileWriter.write, and FileWriter.truncate.
-     */
-    function writeImage () {
-        var onFileWriterReceived = function (fileWriter) {
-            fileWriter.onwrite = logCallback('FileWriter.write', true);
-            fileWriter.onerror = logCallback('FileWriter.write', false);
-            fileWriter.write('some text!');
-        };
-
-        var onFileTruncateWriterReceived = function (fileWriter) {
-            fileWriter.onwrite = logCallback('FileWriter.truncate', true);
-            fileWriter.onerror = logCallback('FileWriter.truncate', false);
-            fileWriter.truncate(10);
-        };
-
-        fileEntry.createWriter(onFileWriterReceived, logCallback('FileEntry.createWriter', false));
-        fileEntry.createWriter(onFileTruncateWriterReceived, null);
     }
 
     function displayImageUsingCanvas () {
@@ -302,14 +188,6 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         canvas.height = h;
         var context = canvas.getContext('2d');
         context.drawImage(img, 0, 0, w, h);
-    }
-
-    /**
-     * Remove image from library using a NATIVE_URI destination type
-     * This calls FileEntry.remove.
-     */
-    function removeImage () {
-        fileEntry.remove(logCallback('FileEntry.remove', true), logCallback('FileEntry.remove', false));
     }
 
     function testInputTag (inputEl) {
@@ -348,53 +226,6 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         }
     }
 
-    function extractOptions () {
-        var els = document.querySelectorAll('#image-options select');
-        var ret = {};
-        /* eslint-disable no-cond-assign */
-        for (var i = 0, el; el = els[i]; ++i) {
-            var value = el.value;
-            if (value === '') continue;
-            value = +value;
-
-            if (el.isBool) {
-                ret[el.getAttribute('name')] = !!value;
-            } else {
-                ret[el.getAttribute('name')] = value;
-            }
-        }
-        /* eslint-enable no-cond-assign */
-        return ret;
-    }
-
-    function createOptionsEl (name, values, selectionDefault) {
-        var openDiv = '<div style="display: inline-block">' + name + ': ';
-        var select = '<select name=' + name + ' id="' + name + '">';
-
-        var defaultOption = '';
-        if (selectionDefault === undefined) {
-            defaultOption = '<option value="">default</option>';
-        }
-
-        var options = '';
-        if (typeof values === 'boolean') {
-            values = { 'true': 1, 'false': 0 };
-        }
-        for (var k in values) {
-            var isSelected = '';
-            if (selectionDefault) {
-                if (selectionDefault[0] === k) {
-                    isSelected = 'selected';
-                }
-            }
-            options += '<option value="' + values[k] + '" ' + isSelected + '>' + k + '</option>';
-        }
-
-        var closeDiv = '</select></div>';
-
-        return openDiv + select + defaultOption + options + closeDiv;
-    }
-
     /******************************************************************************/
 
     var info_div = '<h1>Camera</h1>' +
@@ -403,41 +234,10 @@ exports.defineManualTests = function (contentEl, createActionButton) {
             'img: <img width="100" id="camera_image">' +
             'canvas: <canvas id="canvas" width="1" height="1"></canvas>' +
             '</div>';
-    var options_div = '<h2>Cordova Camera API Options</h2>' +
-            '<div id="image-options">' +
-            createOptionsEl('sourceType', Camera.PictureSourceType, camPictureSourceTypeDefault) +
-            createOptionsEl('destinationType', Camera.DestinationType, camDestinationTypeDefault) +
-            createOptionsEl('encodingType', Camera.EncodingType, camEncodingTypeDefault) +
-            createOptionsEl('mediaType', Camera.MediaType, camMediaTypeDefault) +
-            createOptionsEl('quality', { '0': 0, '50': 50, '80': 80, '100': 100 }, camQualityDefault) +
-            createOptionsEl('targetWidth', { '50': 50, '200': 200, '800': 800, '2048': 2048 }) +
-            createOptionsEl('targetHeight', { '50': 50, '200': 200, '800': 800, '2048': 2048 }) +
-            createOptionsEl('allowEdit', true, camAllowEditDefault) +
-            createOptionsEl('correctOrientation', true, camCorrectOrientationDefault) +
-            createOptionsEl('saveToPhotoAlbum', true, camSaveToPhotoAlbumDefault) +
-            createOptionsEl('cameraDirection', Camera.Direction) +
-            '</div>';
     var getpicture_div = '<div id="takepicture"></div>';
     var test_procedure = '<h4>Recommended Test Procedure</h4>' +
-            'Options not specified should be the default value' +
-            '<br>Status box should update with image and info whenever an image is taken or selected from library' +
-            '</p><div style="background:#B0C4DE;border:1px solid #FFA07A;margin:15px 6px 0px;min-width:295px;max-width:97%;padding:4px 0px 2px 10px;min-height:160px;max-height:200px;overflow:auto">' +
-            '<ol> <li>All default options. Should be able to edit once picture is taken and will be saved to library.</li>' +
-            '</p><li>sourceType=PHOTOLIBRARY<br>Should be able to see picture that was just taken in previous test and edit when selected</li>' +
-            '</p><li>sourceType=Camera<br>allowEdit=false<br>saveToPhotoAlbum=false<br>Should not be able to edit when taken and will not save to library</li>' +
-            '</p><li>encodingType=PNG<br>allowEdit=true<br>saveToPhotoAlbum=true<br>cameraDirection=FRONT<br>Should bring up front camera. Verify in status box info URL that image is encoded as PNG.</li>' +
-            '</p><li>sourceType=SAVEDPHOTOALBUM<br>mediaType=VIDEO<br>Should only be able to select a video</li>' +
-            '</p><li>sourceType=SAVEDPHOTOALBUM<br>mediaType=PICTURE<br>allowEdit=false<br>Should only be able to select a picture and not edit</li>' +
-            '</p><li>sourceType=PHOTOLIBRARY<br>mediaType=ALLMEDIA<br>allowEdit=true<br>Should be able to select pics and videos and edit picture if selected</li>' +
-            '</p><li>sourceType=CAMERA<br>targetWidth & targetHeight=50<br>allowEdit=false<br>Do Get File Metadata test below and take note of size<br>Repeat test but with width and height=800. Size should be significantly larger.</li>' +
-            '</p><li>quality=0<br>targetWidth & targetHeight=default<br>allowEdit=false<br>Do Get File Metadata test below and take note of size<br>Repeat test but with quality=80. Size should be significantly larger.</li>' +
-            '</ol></div>';
-    var inputs_div = '<h2>Native File Inputs</h2>' +
-            'For the following tests, status box should update with file selected' +
-            '</p><div>input type=file <input type="file" class="testInputTag"></div>' +
-            '<div>capture=camera <input type="file" accept="image/*;capture=camera" class="testInputTag"></div>' +
-            '<div>capture=camcorder <input type="file" accept="video/*;capture=camcorder" class="testInputTag"></div>' +
-            '<div>capture=microphone <input type="file" accept="audio/*;capture=microphone" class="testInputTag"></div>';
+            '<br>Status box should update with image and info whenever an image is taken.' +
+            '</p>';
     var actions_div = '<h2>Actions</h2>' +
             'For the following tests, ensure that an image is set in status box' +
             '</p><div id="metadata"></div>' +
@@ -446,24 +246,12 @@ exports.defineManualTests = function (contentEl, createActionButton) {
             'Expected result: Read contents of file.<br>Status box will show "Got file: {some metadata}, FileReader.readAsDataURL() - length = someNumber"' +
             '</p><div id="copy"></div>' +
             'Expected result: Copy image to new location and move file to different location.<br>Status box will show "Call to FileEntry.copyTo success:{some metadata}, Call to FileEntry.moveTo success:{some metadata}"' +
-            '</p><div id="write"></div>' +
-            'Expected result: Write image to library.<br>Status box will show "Call to FileWriter.write success:{some metadata}, Call to FileWriter.truncate success:{some metadata}"' +
             '</p><div id="upload"></div>' +
             'Expected result: Upload image to server.<br>Status box may print out progress. Once finished will show "upload complete"' +
             '</p><div id="draw_canvas"></div>' +
-            'Expected result: Display image using canvas.<br>Image will be displayed in status box under "canvas:"' +
-            '</p><div id="remove"></div>' +
-            'Expected result: Remove image from library.<br>Status box will show "FileEntry.remove success:["OK"]';
+            'Expected result: Display image using canvas.<br>Image will be displayed in status box under "canvas:"';
 
-    // We need to wrap this code due to Windows security restrictions
-    // see http://msdn.microsoft.com/en-us/library/windows/apps/hh465380.aspx#differences for details
-    if (window.MSApp && window.MSApp.execUnsafeLocalFunction) {
-        MSApp.execUnsafeLocalFunction(function () {
-            contentEl.innerHTML = info_div + options_div + getpicture_div + test_procedure + inputs_div + actions_div;
-        });
-    } else {
-        contentEl.innerHTML = info_div + options_div + getpicture_div + test_procedure + inputs_div + actions_div;
-    }
+    contentEl.innerHTML = info_div + getpicture_div + test_procedure + actions_div;
 
     var elements = document.getElementsByClassName('testInputTag');
     var listener = function (e) {
@@ -494,10 +282,6 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         copyImage();
     }, 'copy');
 
-    createActionButton('Write Image', function () {
-        writeImage();
-    }, 'write');
-
     createActionButton('Upload Image', function () {
         uploadImage();
     }, 'upload');
@@ -505,8 +289,4 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     createActionButton('Draw Using Canvas', function () {
         displayImageUsingCanvas();
     }, 'draw_canvas');
-
-    createActionButton('Remove Image', function () {
-        removeImage();
-    }, 'remove');
 };

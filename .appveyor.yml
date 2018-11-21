@@ -14,7 +14,7 @@ image:
 environment:
   nodejs_version: "4"
   matrix:
-    - PLATFORM: windows-10-store
+    - PLATFORM: android-7.0
       JUST_BUILD: --justBuild
 install:
   - npm cache clean -f
@@ -25,4 +25,4 @@ install:
 build: off
 
 test_script:
-  - cordova-paramedic --config pr\%PLATFORM% --plugin . %JUST_BUILD%
+  - cordova-paramedic --config pr\%PLATFORM% --platform android --plugin . %JUST_BUILD%
