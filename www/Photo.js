@@ -33,18 +33,18 @@ var photoExport = {};
 
 /**
  * Callback function that provides an error message.
- * @callback module:photo.onError
+ * @callback module:photo.errorCallback
  * @param {string} message - The message is provided by the device's native code.
  */
 
 /**
  * Callback function that provides the image data.
- * @callback module:photo.onSuccess
+ * @callback module:photo.successCallback
  * @param {string} imageUri - the image file URI.
  * @example
  * // Show image
  * //
- * function cameraCallback(imageUri) {
+ * function successCallback(imageUri) {
  *    var image = document.getElementById('myImage');
  *    image.src = imageUri;
  * }
@@ -54,26 +54,26 @@ var photoExport = {};
  * @description Takes a photo using the camera.  The image is passed to the success callback as
  * the URI for the image file.
  *
- * The `photo.getPicture` function opens the device's default camera
+ * The `photo.takePicture` function opens the device's default camera
  * application that allows users to snap a photo.
  * Once the user snaps the photo, the camera application closes and the application is restored.
  *
  * A `String` representing the image file location on local storage is sent to the
- * [`cameraSuccess`]{@link module:camera.onSuccess} callback function.
+ * [`cameraSuccess`]{@link module:camera.successCallback} callback function.
  *
  * __Supported Platforms__
  *
  * - Android
  *
  * @example
- * navigator.photo.getPicture(cameraSuccess, cameraError);
- * @param {module:camera.onSuccess} successCallback
- * @param {module:camera.onError} errorCallback
+ * navigator.photo.takePicture(cameraSuccess, cameraError);
+ * @param {module:camera.successCallback} successCallback
+ * @param {module:camera.errorCallback} errorCallback
  */
-photoExport.getPicture = function (successCallback, errorCallback) {
-    argscheck.checkArgs('fF', 'Camera.getPicture', arguments);
+photoExport.takePicture = function (successCallback, errorCallback) {
+    argscheck.checkArgs('fF', 'Photo.takePicture', arguments);
 
-    exec(successCallback, errorCallback, 'Camera', 'takePicture');
+    exec(successCallback, errorCallback, 'Photo', 'takePicture');
 };
 
 module.exports = photoExport;

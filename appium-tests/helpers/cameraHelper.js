@@ -93,15 +93,15 @@ module.exports.generateSpecs = function (sourceTypes, destinationTypes, encoding
     return specs;
 };
 
-// calls getPicture() and saves the result in promise
+// calls takePicture() and saves the result in promise
 // note that this function is executed in the context of tested app
 // and not in the context of tests
-module.exports.getPicture = function (opts, pid) {
+module.exports.takePicture = function (opts, pid) {
     if (navigator._appiumPromises[pid - 1]) {
         navigator._appiumPromises[pid - 1] = null;
     }
     navigator._appiumPromises[pid] = Q.defer();
-    navigator.photo.getPicture(function (result) {
+    navigator.photo.takePicture(function (result) {
         navigator._appiumPromises[pid].resolve(result);
     }, function (err) {
         navigator._appiumPromises[pid].reject(err);

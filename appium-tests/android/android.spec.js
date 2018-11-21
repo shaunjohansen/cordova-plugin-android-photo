@@ -42,7 +42,7 @@ var DEFAULT_WEBVIEW_CONTEXT = 'WEBVIEW';
 var PROMISE_PREFIX = 'appium_camera_promise_';
 var CONTEXT_NATIVE_APP = 'NATIVE_APP';
 
-describe('Camera tests Android.', function () {
+describe('Photo tests Android.', function () {
     var driver;
     // the name of webview context, it will be changed to match needed context if there are named ones:
     var webviewContext = DEFAULT_WEBVIEW_CONTEXT;
@@ -106,9 +106,9 @@ describe('Camera tests Android.', function () {
         return cameraHelper.generateSpecs(sourceTypes, destinationTypes, encodingTypes, allowEditOptions, correctOrientationOptions);
     }
 
-    // invokes Camera.getPicture() with the specified options
+    // invokes Photo.takePicture() with the specified options
     // and goes through all UI interactions unless 'skipUiInteractions' is true
-    function getPicture(options, skipUiInteractions) {
+    function takePicture(options, skipUiInteractions) {
         var promiseId = getNextPromiseId();
         if (!options) {
             options = {};
@@ -126,7 +126,7 @@ describe('Camera tests Android.', function () {
 
         return driver
             .context(webviewContext)
-            .execute(cameraHelper.getPicture, [options, promiseId])
+            .execute(cameraHelper.takePicture, [options, promiseId])
             .context(CONTEXT_NATIVE_APP)
             .then(function () {
                 if (skipUiInteractions) {
@@ -273,7 +273,7 @@ describe('Camera tests Android.', function () {
                     targetHeight: 210
                 };
                 return driver
-                    .then(function () { return getPicture(options, true); })
+                    .then(function () { return takePicture(options, true); })
                     .context(CONTEXT_NATIVE_APP)
                     // case insensitive select, will be handy with Android 7 support
                     .elementByXPath('//android.widget.Button[translate(@text, "alow", "ALOW")="ALLOW"]')
@@ -340,7 +340,7 @@ describe('Camera tests Android.', function () {
         return function () {
             return driver
                 .then(function () {
-                    return getPicture(options);
+                    return takePicture(options);
                 })
                 .then(function () {
                     return checkPicture(true, options);
@@ -363,7 +363,7 @@ describe('Camera tests Android.', function () {
             pending('Skipping because this test requires a functioning camera on the Android device/emulator, and this test suite\'s functional camera test failed on your target environment.');
         } else if (isAndroid7 && options.allowEdit) {
             // TODO: Check if it is fixed some day
-            pending('Skipping because can\'t test with allowEdit=true on Android 7: getting unexpected "Camera cancelled" message.');
+            pending('Skipping because can\'t test with allowEdit=true on Android 7: getting unexpected "No Image Selected" message.');
         } else if (isAndroid7 && (options.sourceType !== cameraConstants.PictureSourceType.CAMERA)) {
             pending('Skipping because can\'t click on the gallery tile on Android 7.');
         }
@@ -419,7 +419,7 @@ describe('Camera tests Android.', function () {
 
         return driver
             .then(function () {
-                return getPicture(opts);
+                return takePicture(opts);
             })
             .then(function () {
                 cameraAvailable = true;
@@ -430,7 +430,7 @@ describe('Camera tests Android.', function () {
     }, 5 * MINUTE);
 
     describe('Specs.', function () {
-        // getPicture() with saveToPhotoLibrary = true
+        // takePicture() with saveToPhotoLibrary = true
         it('camera.ui.spec.1 Saving a picture to the photo library', function (done) {
             var opts = {
                 quality: 50,
@@ -449,7 +449,7 @@ describe('Camera tests Android.', function () {
                 .done(done);
         }, 10 * MINUTE);
 
-        // getPicture() with mediaType: VIDEO, sourceType: PHOTOLIBRARY
+        // takePicture() with mediaType: VIDEO, sourceType: PHOTOLIBRARY
         it('camera.ui.spec.2 Selecting only videos', function (done) {
             checkSession(done);
             var spec = function () {
@@ -457,7 +457,7 @@ describe('Camera tests Android.', function () {
                                 mediaType: cameraConstants.MediaType.VIDEO };
                 return driver
                     .then(function () {
-                        return getPicture(options, true);
+                        return takePicture(options, true);
                     })
                     .context(CONTEXT_NATIVE_APP)
                     .then(function () {
@@ -513,7 +513,7 @@ describe('Camera tests Android.', function () {
             tryRunSpec(spec).done(done);
         }, 10 * MINUTE);
 
-        // getPicture(), then dismiss
+        // takePicture(), then dismiss
         // wait for the error callback to be called
         it('camera.ui.spec.3 Dismissing the camera', function (done) {
             var options = {
@@ -527,7 +527,7 @@ describe('Camera tests Android.', function () {
             var spec = function () {
                 return driver
                     .then(function () {
-                        return getPicture(options, true);
+                        return takePicture(options, true);
                     })
                     .context(CONTEXT_NATIVE_APP)
                     .waitForElementByAndroidUIAutomator('new UiSelector().resourceIdMatches(".*cancel.*")', MINUTE / 2)
@@ -540,7 +540,7 @@ describe('Camera tests Android.', function () {
             tryRunSpec(spec).done(done);
         }, 10 * MINUTE);
 
-        // getPicture(), then take picture but dismiss the edit
+        // takePicture(), then take picture but dismiss the edit
         // wait for the error callback to be called
         it('camera.ui.spec.4 Dismissing the edit', function (done) {
             var options = {
@@ -554,7 +554,7 @@ describe('Camera tests Android.', function () {
             var spec = function () {
                 return driver
                     .then(function () {
-                        return getPicture(options, true);
+                        return takePicture(options, true);
                     })
                     .waitForElementByAndroidUIAutomator('new UiSelector().resourceIdMatches(".*shutter.*")', MINUTE / 2)
                     .click()
@@ -681,7 +681,7 @@ describe('Camera tests Android.', function () {
             tryRunSpec(spec).done(done);
         }, 10 * MINUTE);
 
-        // combine various options for getPicture()
+        // combine various options for takePicture()
         generateOptions().forEach(function (spec) {
             it('camera.ui.spec.11.' + spec.id + ' Combining options. ' + spec.description, function (done) {
                 checkSession(done);

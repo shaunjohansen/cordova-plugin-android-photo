@@ -28,9 +28,9 @@ exports.defineAutoTests = function () {
             expect(navigator.photo).toBeDefined();
         });
 
-        it('should contain a getPicture function', function () {
-            expect(navigator.photo.getPicture).toBeDefined();
-            expect(typeof navigator.photo.getPicture === 'function').toBe(true);
+        it('should contain a takePicture function', function () {
+            expect(navigator.photo.takePicture).toBeDefined();
+            expect(typeof navigator.photo.takePicture === 'function').toBe(true);
         });
     });
 
@@ -154,11 +154,11 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         }
     }
 
-    function getPicture () {
+    function takePicture () {
         clearStatus();
         var options = extractOptions();
         log('Getting picture with options: ' + JSON.stringify(options));
-        var popoverHandle = navigator.photo.getPicture(getPictureWin, onGetPictureError, options);
+        var popoverHandle = navigator.photo.takePicture(getPictureWin, onGetPictureError, options);
 
         // Reposition the popover if the orientation changes.
         window.onorientationchange = function () {
@@ -417,7 +417,7 @@ exports.defineManualTests = function (contentEl, createActionButton) {
             createOptionsEl('saveToPhotoAlbum', true, camSaveToPhotoAlbumDefault) +
             createOptionsEl('cameraDirection', Camera.Direction) +
             '</div>';
-    var getpicture_div = '<div id="getpicture"></div>';
+    var getpicture_div = '<div id="takepicture"></div>';
     var test_procedure = '<h4>Recommended Test Procedure</h4>' +
             'Options not specified should be the default value' +
             '<br>Status box should update with image and info whenever an image is taken or selected from library' +
@@ -475,12 +475,12 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     }
 
     createActionButton('Get picture', function () {
-        getPicture();
-    }, 'getpicture');
+        takePicture();
+    }, 'takepicture');
 
     createActionButton('Clear Status', function () {
         clearStatus();
-    }, 'getpicture');
+    }, 'takepicture');
 
     createActionButton('Get File Metadata', function () {
         getFileInfo();

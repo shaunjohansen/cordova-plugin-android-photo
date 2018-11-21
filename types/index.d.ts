@@ -23,7 +23,7 @@ interface Camera {
      * as a base64-encoded String, or as the URI for the image file.
      * @param cameraError Error callback, that get an error message.
      */
-    getPicture(
+    takePicture(
         cameraSuccess: (data: string) => void,
         cameraError: (message: string) => void): void;
 }
