@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-camera-tests",
-  "version": "2.4.1-dev",
+  "name": "cordova-plugin-android-photo-tests",
+  "version": "5.0.0",
   "description": "",
   "cordova": {
-    "id": "cordova-plugin-camera-tests",
+    "id": "cordova-plugin-android-photo-tests",
     "platforms": []
   },
   "keywords": [

@@ -21,14 +21,14 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:rim="http://www.blackberry.com/ns/widgets"
-    id="cordova-plugin-camera"
-    version="4.0.3">
-    <name>Camera</name>
-    <description>Cordova Camera Plugin</description>
+    id="cordova-plugin-android-photo"
+    version="5.0.0">
+    <name>Android Photo</name>
+    <description>Cordova Android Photo Plugin</description>
     <license>Apache 2.0</license>
-    <keywords>cordova,camera</keywords>
-    <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-camera.git</repo>
-    <issue>https://issues.apache.org/jira/browse/CB/component/12320645</issue>
+    <keywords>cordova,android,camera,photo</keywords>
+    <repo>https://github.com/shaunjohansen/cordova-plugin-android-photo.git</repo>
+    <issue>https://github.com/shaunjohansen/cordova-plugin-android-photo/issues</issue>
 
     <engines>
         <engine name="cordova-android" version=">=6.3.0" />
@@ -41,7 +41,7 @@
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Camera">
+            <feature name="Photo">
                 <param name="android-package" value="org.apache.cordova.photo.CameraLauncher"/>
             </feature>
         </config-file>

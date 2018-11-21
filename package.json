@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-android-photo",
-  "version": "4.1.0-dev",
-  "description": "Cordova Camera Plugin",
+  "version": "5.0.0",
+  "description": "Cordova Android Photo Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
     "id": "cordova-plugin-android-photo",
@@ -19,6 +19,7 @@
   "keywords": [
     "cordova",
     "camera",
+    "photo",
     "ecosystem:cordova",
     "cordova-android"
   ],
@@ -26,19 +27,13 @@
     "test": "npm run eslint",
     "eslint": "node node_modules/eslint/bin/eslint www && node node_modules/eslint/bin/eslint src && node node_modules/eslint/bin/eslint tests"
   },
-  "author": "Apache Software Foundation",
+  "author": "Shaun Johansen",
   "license": "Apache-2.0",
   "engines": {
     "cordovaDependencies": {
-      "3.0.0": {
-        "cordova-android": ">=6.3.0"
-      },
-      "4.1.0": {
+      "5.0.0": {
         "cordova-android": ">=6.3.0",
         "cordova": ">=7.1.0"
-      },
-      "5.0.0": {
-        "cordova": ">100"
       }
     }
   },
