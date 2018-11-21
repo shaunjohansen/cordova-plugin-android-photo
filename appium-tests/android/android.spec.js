@@ -199,14 +199,6 @@ describe('Photo tests Android.', function () {
             .done(done);
     }, 30 * MINUTE);
 
-    it('camera.ui.util determine screen dimensions', function (done) {
-        checkSession(done);
-        driver
-            .context(CONTEXT_NATIVE_APP)
-            .getWindowSize()
-            .done(done);
-    }, MINUTE);
-
     it('camera.ui take and check a picture', function (done) {
         checkSession(done);
         checkCamera(pending);

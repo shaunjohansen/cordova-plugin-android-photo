@@ -1,4 +1,4 @@
-/* global Q, resolveLocalFileSystemURL */
+/* global Q, resolveLocalFileSystemURL, FileReader */
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
