@@ -144,3 +144,11 @@ function cameraCallback(imageUri) {
    image.src = imageUri;
 }
 ```
+
+---
+
+# Big Thanks
+
+* Cross-browser testing platform and open source <3 provided by [Sauce Labs][saucelabs_homepage]
+
+[saucelabs_homepage]: https://saucelabs.com
